@@ -1,16 +1,11 @@
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div v-if="locationAccessDenied">
+    <button>location access required</button>
   </div>
   <div v-if="location">
     <p>Lat: {{ lat }}</p>
     <p>Long: {{ long }}</p>
-    <p>Acc: {{ acc }} meters</p>
+    <p>Accuracy: {{ acc.toLocaleString() }} meters</p>
   </div>
   <div>
     <button @click="getLocation">Locate</button>
@@ -24,6 +19,7 @@
   import HelloWorld from './components/HelloWorld.vue'
 
   const location = ref(false)
+  const locationAccessDenied = ref(false)
   const lat = ref(null)
   const long = ref(null)
   const acc = ref(null)
@@ -49,6 +45,7 @@
   }
 
   const locationError = err => {
+    locationAccessDenied.value = true
     console.warn(`ERROR(${err.code}): ${err.message}`)
   }
 
